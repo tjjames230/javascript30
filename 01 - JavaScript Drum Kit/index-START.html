@@ -69,18 +69,17 @@
 			document.addEventListener("keydown", (event) => {
 				const keyCode = event.keyCode;
 
-				//update style based on given keyCode
-				applyStyle(keyCode);
+				//update style based on given keyCode & play sound
+				applyEffects(keyCode);
 
-				//play audio based on given keyCode
-
+				// reset style
 				document.addEventListener("keyup", () => {
-					resetStyle(keyCode);
+					resetEffects(keyCode);
 				});
 			});
 
 			//reset style and stop playing on keyup
-			function resetStyle(code) {
+			function resetEffects(code) {
 				let audio = document.querySelector(`audio[data-key='${code}']`);
 
 				keys.map((key) => {
@@ -90,7 +89,7 @@
 				});
 			}
 
-			function applyStyle(code) {
+			function applyEffects(code) {
 				let audio = document.querySelector(`audio[data-key='${code}']`);
 
 				keys.map((key) => {
