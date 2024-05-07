@@ -68,12 +68,13 @@
 			.min-hand,
 			.second-hand {
 				transform-origin: right;
-				transition: transform 100ms ease-in-out;
+				transition: transform 50ms ease-in-out;
+				transition-timing-function: cubic-bezier(0, 2.06, 0.44, 1);
 			}
 		</style>
 
 		<script>
-			let interval = setInterval(updateTime, 1001);
+			setInterval(updateTime, 1000);
 
 			function updateTime() {
 				let time = new Date();
