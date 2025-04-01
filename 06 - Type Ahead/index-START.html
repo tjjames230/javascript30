@@ -1,23 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Type Ahead 👀</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="https://fav.farm/🔥" />
-</head>
-<body>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Type Ahead 👀</title>
+		<link rel="stylesheet" href="style.css" />
+		<link rel="icon" href="https://fav.farm/🔥" />
+	</head>
+	<body>
+		<form class="search-form">
+			<input type="text" class="search" placeholder="City or State" />
+			<ul class="suggestions">
+				<li>Filter for a city</li>
+				<li>or a state</li>
+			</ul>
+		</form>
+		<script>
+			const list = document.querySelector(".suggestions");
+			const searchBox = document.querySelector(".search");
+			const endpoint =
+				"https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
 
-  <form class="search-form">
-    <input type="text" class="search" placeholder="City or State">
-    <ul class="suggestions">
-      <li>Filter for a city</li>
-      <li>or a state</li>
-    </ul>
-  </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+			searchBox.addEventListener("keyup", (e) => {
+				const searchResult = e.target.value;
+				search(searchResult);
+			});
 
-</script>
-</body>
+			async function getData() {
+				try {
+					const response = await fetch(endpoint);
+
+					if (!response.ok) {
+						throw new Error(`Response Status: ${response.status}`);
+					}
+
+					const data = await response.json();
+					return data;
+					//const result = data.filter((obj) => obj.city == "New York");
+				} catch (error) {
+					console.log("error fetching data");
+				}
+			}
+
+			async function search(input) {
+				const data = await getData();
+				const filteredInput = input.toLowerCase();
+
+				const result = data.filter(
+					(obj) =>
+						obj.city.toLowerCase().includes(filteredInput) ||
+						obj.state.toLowerCase().includes(filteredInput)
+				);
+
+				updateList(result);
+			}
+
+			function updateList(arr) {
+				list.innerHTML = "";
+
+				arr.map((result) => {
+					const li = document.createElement("li");
+					const city = document.createElement("p");
+					const population = document.createElement("p");
+
+					city.classList.add("city");
+					population.classList.add("population");
+
+					city.append(result.city);
+					population.append(result.population);
+					li.append(city, population);
+
+					list.append(li);
+				});
+			}
+		</script>
+	</body>
 </html>
